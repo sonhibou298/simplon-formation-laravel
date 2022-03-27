@@ -15,7 +15,8 @@ class SousCategorieController extends Controller
      */
     public function index()
     {
-        //
+        $souscat = SousCategorie::all();
+        return view('souscategorie.create');
     }
 
     /**
@@ -25,7 +26,7 @@ class SousCategorieController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**

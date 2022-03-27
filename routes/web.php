@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\FormationController;
+use App\Http\Controllers\SousCategorieController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,10 +21,18 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+    return view('formation.add');
+})->middleware(['auth'])->name('formationAdd');
 
 require __DIR__.'/auth.php';
 
-Route::get('/formation', [FormationController::class, 'index'])->name('accuel');
-Route::get('addFormation'. [FormationController::class, 'create'])->name('AjoutFormation');
+Route::get('/formation', [FormationController::class, 'index'])->name('accueil');
+Route::get('/addFormation', [FormationController::class, 'create'])->middleware(['auth'])->name('AjoutFormation');
+Route::post('/addFormation', [FormationController::class, 'store'])->name('AjoutFormation');
+
+Route::get('/addCategorie', [CategorieController::class, 'create'])->name('AjoutCategorie');
+Route::post('/addCategorie', [CategorieController::class, 'create'])->name('AjoutCategorie');
+
+Route::get('/create', [SousCategorieController::class, 'index'])->name('createSouscat');
+Route::get('/addSousCategorie', [SousCategorieController::class, 'create'])->name('AjoutSousCategorie');
+Route::post('/addSousCategorie', [SousCategorieController::class, 'create'])->name('AjoutSousCategorie');

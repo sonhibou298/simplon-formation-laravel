@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Formation;
 use App\Http\Requests\StoreFormationRequest;
 use App\Http\Requests\UpdateFormationRequest;
+use App\Models\SousCategorie;
+use Illuminate\Support\Facades\Storage;
 
 class FormationController extends Controller
 {
@@ -15,7 +17,8 @@ class FormationController extends Controller
      */
     public function index()
     {
-        return view('formation.index');
+        $formation = Formation::all();
+        return view('formation.index', compact("formation"));
     }
 
     /**
@@ -25,7 +28,9 @@ class FormationController extends Controller
      */
     public function create()
     {
-
+        $formation = Formation::all();
+        $souscat = SousCategorie::all();
+        return view('formation.add', compact("souscat"));
     }
 
     /**
@@ -36,7 +41,27 @@ class FormationController extends Controller
      */
     public function store(StoreFormationRequest $request)
     {
-        //
+        $request->validate([
+            'nomFormation' => ['required', 'max:10', 'min:3'],
+            'descripte' => ['required'],
+            'photo' => ['required'],
+            'sous_categorie' => ['required'],
+
+        ]);
+
+        $filename = time().'.'.$request->images->extension();
+
+        Storage::disk('local')->put('images', $request->photo);
+         die();
+
+        $formation = new Formation();
+        $formation->nomFormation = $request->nom;
+        $formation->description = $request->description;
+        $formation->photo = $request->photo;
+
+        $formation->sous_categorie_id = $request->souscategorie;
+        $formation->save();
+        return redirect()->route('accueil');
     }
 
     /**
